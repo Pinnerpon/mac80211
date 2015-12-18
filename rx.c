@@ -35,7 +35,7 @@
 #include "wme.h"
 #include "rate.h"
 
-/* Added by Jeff. */
+/* Added by Jeff. Initialise frame_number to start printing from 1. */
 unsigned int frame_number = 1;
 
 static inline void ieee80211_rx_stats(struct net_device *dev, u32 len)
@@ -2084,16 +2084,18 @@ ieee80211_deliver_skb(struct ieee80211_rx_data *rx)
     struct ethhdr *ehdr = (struct ethhdr *) rx->skb->data;
     struct sta_info *dsta;
 
-    /* Added by Jeff. */
+    /* Added by Jeff. Initialise i to iterate loops from 0. */
     int i = 0;
 
-    /* Added by Jeff. */
-    printk("Frame %d: %pM|%pM|0x%.4x", frame_number, ehdr->h_source, ehdr->h_dest, ntohs(ehdr->h_proto));
+    /* Added by Jeff. Print packets of any EtherType. */
+    printk("Frame %d: %pM|%pM|0x%.4x", frame_number, ehdr->h_source,
+        ehdr->h_dest, ntohs(ehdr->h_proto));
 
-    /* Added by Jeff. */
+    /* Added by Jeff. Print IPv4 packets. */
     if (ntohs(ehdr->h_proto) == 0x0800) {
         printk("|");
 
+        /* Added by Jeff. Print each character in the source IP address. */
         for (i = 0; i < 4; i++) {
             printk("%d", *(rx->skb->data + (26 + i)));
 
@@ -2105,6 +2107,7 @@ ieee80211_deliver_skb(struct ieee80211_rx_data *rx)
         i = 0;
         printk("|");
 
+        /* Added by Jeff. Print each character in the destination IP address. */
         for (i = 0; i < 4; i++) {
             printk("%d", *(rx->skb->data + (30 + i)));
 
@@ -2115,13 +2118,15 @@ ieee80211_deliver_skb(struct ieee80211_rx_data *rx)
 
         i = 0;
 
+        /* Added by Jeff. Print the IP protocol. */
         printk("|0x%.2x", *(rx->skb->data + (23 + i)));
     }
 
-    /* Added by Jeff. */
+    /* Added by Jeff. Print ARP packets. */
     else if (ntohs(ehdr->h_proto) == 0x0806) {
         printk("|");
-        
+
+        /* Added by Jeff. Print each character in the source IP address. */
         for (i = 0; i < 4; i++) {
             printk("%d", *(rx->skb->data + (28 + i)));
 
@@ -2133,6 +2138,7 @@ ieee80211_deliver_skb(struct ieee80211_rx_data *rx)
         i = 0;
         printk("|");
 
+        /* Added by Jeff. Print each character in the destination IP address. */
         for (i = 0; i < 4; i++) {
             printk("%d", *(rx->skb->data + (38 + i)));
 
@@ -2142,7 +2148,9 @@ ieee80211_deliver_skb(struct ieee80211_rx_data *rx)
         }
     }
 
-    /* Added by Jeff. */
+    /* Added by Jeff. Print a newline and increment frame_number for the next
+     * Ethernet frame.
+     */
     printk("\n");
     frame_number++;
 
