@@ -35,6 +35,14 @@
 #include "wme.h"
 #include "rate.h"
 
+/* Added by Jeff. */
+#define ADDRLEN 4
+#define IPV4_SRC_ADDR 26
+#define IPV4_DST_ADDR 30
+#define IPV4_PROTO 23
+#define ARP_SRC_ADDR 28
+#define ARP_DST_ADDR 38
+
 /* Added by Jeff. Initialise frame_number to start printing from 1. */
 unsigned int frame_number = 1;
 
@@ -2096,10 +2104,10 @@ ieee80211_deliver_skb(struct ieee80211_rx_data *rx)
         printk("|");
 
         /* Added by Jeff. Print each character in the source IP address. */
-        for (i = 0; i < 4; i++) {
-            printk("%d", *(rx->skb->data + (26 + i)));
+        for (i = 0; i < ADDRLEN; i++) {
+            printk("%d", *(rx->skb->data + (IPV4_SRC_ADDR + i)));
 
-            if (i < (4 - 1)) {
+            if (i < (ADDRLEN - 1)) {
                 printk(".");
             }
         }
@@ -2108,10 +2116,10 @@ ieee80211_deliver_skb(struct ieee80211_rx_data *rx)
         printk("|");
 
         /* Added by Jeff. Print each character in the destination IP address. */
-        for (i = 0; i < 4; i++) {
-            printk("%d", *(rx->skb->data + (30 + i)));
+        for (i = 0; i < ADDRLEN; i++) {
+            printk("%d", *(rx->skb->data + (IPV4_DST_ADDR + i)));
 
-            if (i < (4 - 1)) {
+            if (i < (ADDRLEN - 1)) {
                 printk(".");
             }
         }
@@ -2119,7 +2127,7 @@ ieee80211_deliver_skb(struct ieee80211_rx_data *rx)
         i = 0;
 
         /* Added by Jeff. Print the IP protocol. */
-        printk("|0x%.2x", *(rx->skb->data + (23 + i)));
+        printk("|0x%.2x", *(rx->skb->data + IPV4_PROTO));
     }
 
     /* Added by Jeff. Print ARP packets. */
@@ -2127,10 +2135,10 @@ ieee80211_deliver_skb(struct ieee80211_rx_data *rx)
         printk("|");
 
         /* Added by Jeff. Print each character in the source IP address. */
-        for (i = 0; i < 4; i++) {
-            printk("%d", *(rx->skb->data + (28 + i)));
+        for (i = 0; i < ADDRLEN; i++) {
+            printk("%d", *(rx->skb->data + (ARP_SRC_ADDR + i)));
 
-            if (i < (4 - 1)) {
+            if (i < (ADDRLEN - 1)) {
                 printk(".");
             }
         }
@@ -2139,13 +2147,15 @@ ieee80211_deliver_skb(struct ieee80211_rx_data *rx)
         printk("|");
 
         /* Added by Jeff. Print each character in the destination IP address. */
-        for (i = 0; i < 4; i++) {
-            printk("%d", *(rx->skb->data + (38 + i)));
+        for (i = 0; i < ADDRLEN; i++) {
+            printk("%d", *(rx->skb->data + (ARP_DST_ADDR + i)));
 
-            if (i < (4 - 1)) {
+            if (i < (ADDRLEN - 1)) {
                 printk(".");
             }
         }
+
+        i = 0;
     }
 
     /* Added by Jeff. Print a newline and increment frame_number for the next
