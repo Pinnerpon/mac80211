@@ -13,4 +13,4 @@ This is the format of `ethernet_frame_headers.txt`:
 Frame [Number]: [Source MAC address]|[Destination MAC address]|[EtherType]|[Source IP address]|[Destination IP address]|[IP protocol]
 ```
 
-The ability to control traffic can be demonstrated by using a function in `rx.c` that can block traffic to a particular device.
+The ability to control traffic can be demonstrated by using the `ieee80211_deliver_skb()` function in `rx.c` that can block traffic to a particular device.
