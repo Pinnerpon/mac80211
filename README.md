@@ -13,4 +13,12 @@ This is the format of `ethernet_frame_headers.txt`:
 Frame [Number]: [Source MAC address]|[Destination MAC address]|[EtherType]|[Source IP address]|[Destination IP address]|[IP protocol]
 ```
 
-Use `ieee80211_deliver_skb()` to control traffic by blocking it to a particular device.
+Use `ieee80211_deliver_skb()` to control traffic by blocking it to a particular device, since it forwards packets between stations on the WAP.
+
+On line [`2108`](http://lxr.free-electrons.com/source/net/mac80211/rx.c#L2108) of `rx.c`, the pointer to a received Ethernet frame is assigned to the transmit buffer:
+
+```
+xmit_skb = skb;
+```
+
+If only the pointer was assigned instead, and if the Ethernet frame contains a certain value (e.g. a specific MAC or IP address), which Ethernet frames are forwarded or dropped can be controlled.
