@@ -21,4 +21,4 @@ On line [`2108`](http://lxr.free-electrons.com/source/net/mac80211/rx.c#L2108) o
 xmit_skb = skb;
 ```
 
-If only the pointer was assigned instead, and if the Ethernet frame contains a certain value (e.g. a specific MAC or IP address), which Ethernet frames are forwarded or dropped can be controlled!s
+If only the pointer was assigned instead, and if the Ethernet frame contains a certain value (e.g. a specific MAC or IP address), which Ethernet frames are forwarded or dropped can be controlled.
